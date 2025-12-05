@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formulario de Registro</title>
+  <style>
+  :root {
+    --card-bg: rgba(255, 255, 255, 0.9);
+    /* PALETA CAFÉ CÁLIDA */
+    --primary: #8b5a2b;        /* café caramelo */
+    --primary-dark: #5a3a1b;   /* café oscuro */
+    --accent: #c38452;         /* acento café claro */
+    --text-main: #2b1c19;
+    --text-muted: #7a5a52;
+    --border-soft: #ccb494;    /* borde beige-café suave */
+    --error: #c0392b;
+
+    --radius-lg: 28px;
+    --radius-md: 12px;
+    --shadow-soft: 0 22px 55px rgba(0, 0, 0, 0.35);
+    --transition-fast: 0.18s ease-out;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text-main);
+    padding: 24px;
+    /* Fondo con plantas acogedoras */
+    background-image: url("plantas.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  /* Capa oscura muy suave para que el texto se lea mejor */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(0,0,0,0.25), transparent 55%),
+                radial-gradient(circle at bottom, rgba(0,0,0,0.35), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 540px);
+    justify-content: center;
+  }
+
+  .card {
+    position: relative;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.92));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-soft);
+    padding: 28px 26px 26px;
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -100px auto auto 65%;
+    width: 220px;
+    height: 220px;
+    /* brillo ahora café */
+    background: radial-gradient(circle at center, rgba(195, 132, 82, 0.8), transparent 70%);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  header {
+    position: relative;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(195, 132, 82, 0.35);
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    color: var(--text-main);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  form {
+    position: relative;
+    display: grid;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .row-2 {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 720px) {
+    .row-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  label span.tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(195, 132, 82, 0.24); /* chip café claro */
+    color: var(--text-muted);
+  }
+
+  input,
+  select {
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-soft);
+    outline: none;
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.92);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast),
+      background var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  input::placeholder {
+    color: rgba(122, 90, 82, 0.7);
+  }
+
+  input:focus,
+  select:focus {
+    border-color: var(--primary); /* foco café */
+    box-shadow: 0 0 0 1px rgba(139, 90, 43, 0.32);
+    background: #fff;
+    transform: translateY(-1px);
+  }
+
+  input[type="file"] {
+    padding: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    background: rgba(245, 233, 210, 0.95); /* beige cálido */
+    border-style: dashed;
+  }
+
+  .help {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .error {
+    display: none;
+    font-size: 12px;
+    color: var(--error);
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-main);
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary); /* check café */
+    cursor: pointer;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 10px 22px rgba(90, 58, 27, 0.6); /* sombra café */
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+  }
+
+  button span.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #fff;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 14px 30px rgba(90, 58, 27, 0.7);
+  }
+
+  button:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 6px 18px rgba(90, 58, 27, 0.5);
+  }
+
+  button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .footer-note strong {
+    color: var(--text-main);
+    font-weight: 600;
+  }
+  </style>
+
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <header>
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          Formulario de registro
+        </div>
+        <h1>Completa tus datos</h1>
+        <p class="subtitle">Usa tus datos reales y adjunta una identificación clara para continuar.</p>
+      </header>
+
+      <form id="registro" novalidate>
+        <div class="field">
+          <label for="nombre">
+            Nombre completo
+            <span class="tag">Obligatorio</span>
+          </label>
+          <input id="nombre" name="nombre" type="text" placeholder="Ej. Sofía Ramírez" required minlength="2" />
+          <p class="help">Mínimo 2 caracteres.</p>
+          <p class="error" data-for="nombre">Ingresa un nombre válido.</p>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label for="correo">Correo electrónico</label>
+            <input id="correo" name="correo" type="email" placeholder="tucorreo@ejemplo.com" required />
+            <p class="error" data-for="correo">Ingresa un correo válido.</p>
+          </div>
+
+          <div class="field">
+            <label for="pais">País de origen</label>
+            <select id="pais" name="pais" required>
+              <option value="" disabled selected>Selecciona tu país</option>
+              <option value="AR">Argentina</option>
+              <option value="BO">Bolivia</option>
+              <option value="CL">Chile</option>
+              <option value="CO">Colombia</option>
+              <option value="CR">Costa Rica</option>
+              <option value="CU">Cuba</option>
+              <option value="DO">República Dominicana</option>
+              <option value="EC">Ecuador</option>
+              <option value="ES">España</option>
+              <option value="GT">Guatemala</option>
+              <option value="HN">Honduras</option>
+              <option value="MX">México</option>
+              <option value="NI">Nicaragua</option>
+              <option value="PA">Panamá</option>
+              <option value="PE">Perú</option>
+              <option value="PY">Paraguay</option>
+              <option value="SV">El Salvador</option>
+              <option value="UY">Uruguay</option>
+              <option value="VE">Venezuela</option>
+              <option value="US">Estados Unidos</option>
+              <option value="CA">Canadá</option>
+              <option value="BR">Brasil</option>
+              <option value="OTRO">Otro</option>
+            </select>
+            <p class="error" data-for="pais">Selecciona un país.</p>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label for="edad">Edad</label>
+            <input id="edad" name="edad" type="number" min="13" max="120" placeholder="18" required />
+            <p class="help">Debes tener entre 13 y 120 años.</p>
+            <p class="error" data-for="edad">Ingresa una edad válida.</p>
+          </div>
+
+          <div class="field">
+            <label for="telefono">Número de teléfono</label>
+            <input
+              id="telefono"
+              name="telefono"
+              type="tel"
+              inputmode="numeric"
+              placeholder="5523456789"
+              maxlength="10"
+              pattern="^\d{10}$"
+              required
+            />
+            <p class="help">Ingresa exactamente 10 dígitos (solo números).</p>
+            <p class="error" data-for="telefono">Ingresa un teléfono de 10 dígitos.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="identificacion">
+            Identificación
+            <span class="tag">PDF / JPG / PNG</span>
+          </label>
+          <input
+            id="identificacion"
+            name="identificacion"
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            required
+          />
+          <p class="help">Máx. 5 MB. Asegúrate de que se lea claramente.</p>
+          <p class="error" data-for="identificacion">Adjunta una identificación válida (hasta 5 MB).</p>
+        </div>
+
+        <div class="field">
+          <div class="checkbox-row">
+            <input type="checkbox" id="terminos" required />
+            <label for="terminos">Acepto los términos y condiciones</label>
+          </div>
+          <p class="error" data-for="terminos">Debes aceptar los términos.</p>
+        </div>
+
+        <div class="actions">
+          <button type="submit">
+            <span class="dot"></span>
+            Enviar formulario
+          </button>
+          <p class="footer-note">
+            Tus datos se guardarán de forma <strong>confidencial</strong>.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('registro');
+    const maxSizeBytes = 5 * 1024 * 1024;
+
+    function setError(id, show) {
+      const el = document.querySelector('.error[data-for="' + id + '"]');
+      if (el) el.style.display = show ? 'block' : 'none';
+    }
+
+    function validateFile(input) {
+      const file = input.files && input.files[0];
+      if (!file) return false;
+      const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+      const typeOk = validTypes.includes(file.type);
+      const sizeOk = file.size <= maxSizeBytes;
+      return typeOk && sizeOk;
+    }
+
+    form.addEventListener('submit', (e) => {
+      let ok = true;
+
+      ['nombre','correo','pais','edad','telefono','terminos'].forEach(id => {
+        const field = document.getElementById(id);
+        const valid = field.checkValidity();
+        setError(id, !valid);
+        if (!valid) ok = false;
+      });
+
+      const fileInput = document.getElementById('identificacion');
+      const fileValid = fileInput.files.length > 0 && validateFile(fileInput);
+      setError('identificacion', !fileValid);
+      if (!fileValid) ok = false;
+
+      if (!ok) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+
+    ['nombre','correo','pais','edad','telefono','terminos'].forEach(id => {
+      const field = document.getElementById(id);
+      field.addEventListener('input', () => setError(id, !field.checkValidity()));
+      field.addEventListener('change', () => setError(id, !field.checkValidity()));
+    });
+
+    document.getElementById('identificacion').addEventListener('change', (e) => {
+      setError('identificacion', !validateFile(e.target));
+    });
+
+    // Teléfono: solo números y máximo 10 dígitos
+    const telInput = document.getElementById('telefono');
+    telInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+    });
+  </script>
+</body>
+</html>
